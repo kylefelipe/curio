@@ -1,0 +1,79 @@
+[project]
+name = "curio-backend"
+version = "0.1.0"
+authors = [{ name = "Kyle Felipe", email = "kylefelipe@gmail.com" }]
+description = "Curio Backend is a FastAPI application designed to provide a robust backend solution for the Curio platform, leveraging modern Python libraries and best practices"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "uvicorn[standard] (>=0.34.3,<0.35.0)",
+    "motor (>=3.7.1,<4.0.0)",
+    "sqlalchemy (>=2.0.41,<3.0.0)",
+    "asyncpg (>=0.30.0,<0.31.0)",
+    "geoalchemy2 (>=0.17.1,<0.18.0)",
+    "pydantic (>=2.11.5,<3.0.0)",
+    "aiofiles (>=24.1.0,<25.0.0)",
+    "python-multipart (>=0.0.20,<0.0.21)",
+    "python-dotenv (>=1.1.0,<2.0.0)",
+    "fastapi[standard] (>=0.115.12,<0.116.0)",
+    "pydantic-settings (>=2.9.1,<3.0.0)",
+    "pyjwt (>=2.10.1,<3.0.0)",
+    "passlib (>=1.7.4,<2.0.0)",
+    "alembic (>=1.16.2,<2.0.0)",
+    "psycopg2[binary] (>=2.9.10,<3.0.0)",
+]
+
+[project.urls]
+repository = "https://github.com/kylefelipe/curio"
+"bug-tracker" = "https://github.com/kylefelipe/curio/issues"
+
+[tool.poetry]
+packages = [{ include = "curio_backend", from = "src" }]
+
+[tool.poetry.dependencies]
+python-dotenv = "*"
+
+[tool.poetry.group.dev.dependencies]
+taskipy = "^1.14.1"
+pytest = "^8.4.0"
+pytest-cov = "^6.1.1"
+isort = "^6.0.1"
+ignore = "^0.1.4"
+httpx = "^0.28.1"
+ruff = "^0.12.2"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88
+extend-exclude = ["migrations"]
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+per-file-ignores = { "__init__.py" = ["F401"] }
+
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = "-p no:warnings"
+
+[tool.taskipy.tasks]
+lint = "ruff check"
+pre_format = "ruff check --fix"
+format = "ruff format"
+run = "fastapi dev app/main.py"
+pre_test = "task lint"
+test = "pytest -s -x --cov=curio_backend -vv"
+post_test = "coverage html"
+
+[project.scripts]
+
+curio-manager = "manage:app"

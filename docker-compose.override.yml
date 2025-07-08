@@ -1,0 +1,20 @@
+services:
+  backend:
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - ./curio_backend:/app:delegated
+  mongo-express:
+      image: mongo-express:latest
+      container_name: curio_mongo_express
+      restart: always
+      ports:
+        - "8081:8081"                # UI disponível em http://localhost:8081
+      environment:
+        ME_CONFIG_MONGODB_SERVER: "mongo"
+        ME_CONFIG_MONGODB_PORT: "27017"
+        ME_CONFIG_BASICAUTH_USERNAME: "admin"    # usuário para acessar o Mongo-Express
+        ME_CONFIG_BASICAUTH_PASSWORD: "secret"   # senha para acessar o Mongo-Express
+      depends_on:
+        - mongo
+      networks:
+        - curio_net

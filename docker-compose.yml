@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./curio_backend
+      dockerfile: Dockerfile
+    container_name: curio_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./curio_backend/.env
+    volumes:
+      - ./curio_backend:/app:delegated
+    depends_on:
+      - postgres
+      - mongo
+    networks:
+      - curio_net
+
+  postgres:
+    image: kartoza/postgis
+    container_name: curio_postgres
+    restart: always
+    ports:
+      - "5436:5432"
+    env_file:
+      - ./curio_backend/.env
+    environment:
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis
+    # volumes:
+    #   - ./db_data/pgdata:/var/lib/postgresql/data
+    #   - pgdata:/var/lib/postgresql/data
+    networks:
+      - curio_net
+
+  mongo:
+    image: mongo
+    container_name: curio_mongo
+    ports:
+      - "27017:27017"
+    env_file:
+      - ./curio_backend/.env
+    # volumes:
+    #   - ./db_data/mongodata:/data/db
+    #    - mongodata:/data/db
+    networks:
+      - curio_net
+
+# volumes:
+#   pgdata:
+#   mongodata:
+#   mongoconfig:
+
+networks:
+  curio_net:
