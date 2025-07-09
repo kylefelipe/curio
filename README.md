@@ -1,4 +1,4 @@
-# Curio - Formulários que cantam os ddos do seu mapa
+# Curió - Formulários que cantam os ddos do seu mapa
 
 O Curió é um sistema de formulários que permite a criação de questionários e pesquisas de forma simples e intuitiva. Com ele, você pode coletar dados de forma eficiente e organizada, facilitando a análise posterior.
 
